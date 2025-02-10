@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export const PORT: number = Number(process.env.PORT) || 3000;
-export const DB_NAME: string = process.env.DB_NAME || "proyecto_m4_front";
+export const PORT: number = Number(process.env.PORT) || 3030;
+export const DB_NAME: string = process.env.DB_NAME || "ecommercedidonna";
 export const DB_USER: string = process.env.DB_USER || "postgres";
 export const DB_PASSWORD: string = process.env.DB_PASSWORD || "admin";
 export const DB_HOST: string = process.env.DB_HOST || "localhost";

@@ -2,7 +2,7 @@ import { AppDataSource } from "../config/dataSource";
 import { Product } from "../entities/Product";
 import { ProductRepository } from "../repositories/product.repository";
 
-interface IProduct {
+export interface IProduct {
   name: string;
   price: number;
   description: string;
@@ -11,7 +11,7 @@ interface IProduct {
   stock: number;
 }
 
-const productsToPreLoad: IProduct[] = [
+export const productsToPreLoad: IProduct[] = [
   {
     name: "iPhone 11",
     price: 699,

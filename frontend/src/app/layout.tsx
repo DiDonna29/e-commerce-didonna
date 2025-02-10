@@ -1,12 +1,12 @@
-// layout.tsx
 "use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { usePathname } from "next/navigation";
-import { publicLinks, personalLinks } from "@/components/Navbar/NavLinks";
+import { useState, useEffect } from "react";
+import { CartProvider } from "@/app/context/CartContext";
+import { AuthProvider } from "@/app/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,24 +23,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
-  // Define las rutas permitidas
-  const allowedRoutes = [...publicLinks, ...personalLinks].map(
-    link => link.href
-  );
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsUserLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsUserLoggedIn(false);
+  };
 
   return (
     <html lang="es">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900 text-white`}>
-        <div className="flex flex-col min-h-screen">
-          {/* Renderiza Navbar solo si estamos en una ruta permitida */}
-          {allowedRoutes.includes(pathname) && <Navbar />}
-          <main className="flex-grow">{children}</main>
-          {/* Renderiza Footer solo si estamos en una ruta permitida */}
-          {allowedRoutes.includes(pathname) && <Footer />}
-        </div>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}>
+        <AuthProvider>
+          <CartProvider>
+            <div className="flex flex-col min-h-screen bg">
+              <Navbar isUserLoggedIn={isUserLoggedIn} onLogout={handleLogout} />
+              <main className="flex-grow mt-0">{children}</main>
+              <Footer />
+            </div>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
