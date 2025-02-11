@@ -1,5 +1,4 @@
 "use client";
-import { lusitana } from "@/app/ui/fonts";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,12 +37,12 @@ export default function Home() {
       {products.map((product, index) => (
         <section
           key={product.id}
-          className="scroll-section relative h-screen flex flex-col md:flex-row snap-start">
+          className="scroll-section relative h-screen flex flex-col md:flex-row snap-start ml-20 mr-20 rounded-md">
           {" "}
           {/* snap-start */}
           {/* Imagen del producto (alternando lados) */}
           <div
-            className={`w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden group shine-effect ${
+            className={`w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden group shine-effect rounded-2xl ${
               index % 2 === 0 ? "order-1" : "order-2"
             }`}>
             <div className="relative w-full h-full">
@@ -58,30 +57,30 @@ export default function Home() {
           </div>
           {/* Información del producto */}
           <div
-            className={`w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center p-8 bg-black ${
+            className={`w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center p-8 bg-black rounded-2xl ${
               index % 2 === 0 ? "order-2" : "order-1"
             }`}>
             <div className="max-w-lg float-animation">
               <span className="text-neutral-400 tracking-wider text-sm font-mono">
                 {index + 1} / {products.length}
               </span>
-              <h2 className="mt-4 text-5xl md:text-7xl font-bold leading-none bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent cursor-pointer">
+              <h2 className="mt-4 text-5xl md:text-7xl font-bold leading-none bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
                 {product.name}
               </h2>
               <p className="mt-6 text-neutral-400 text-lg leading-relaxed">
                 {product.description}
               </p>
-              <p className="text-lg font-semibold text-black my-3">
+              <p className="text-lg font-semibold text-white my-3">
                 ${product.price}
               </p>
               <button
                 onClick={() => addToCart(product)}
-                className="bg-indigo-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-indigo-600">
-                Add to Cart
+                className="bg-white text-black font-bold px-4 py-2 rounded-md mt-4 hover:bg-blue-600 hover:text-white">
+                Añadir al carrito
               </button>
               <Link href={`/Product/${product.id}`}>
-                <button className="mt-4 px-6 py-3 bg-white/0 hover:bg-white/20 rounded-full text-sm font-medium transition-all duration-300 hover:tracking-wider">
-                  Ver Más Productos →
+                <button className="ml-6 mt-4 px-6 bg-gradient-to-b from-blue-950 via-blue-900 to-blue-600  py-3 bg-white/0 hover:bg-blue-500/10 rounded-md text-sm font-medium transition-all duration-300 hover:tracking-wider">
+                  Ver detalle de producto →
                 </button>
               </Link>
             </div>
