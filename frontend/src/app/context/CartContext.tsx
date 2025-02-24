@@ -13,6 +13,7 @@ interface Product {
   name: string;
   price: number;
   image: string;
+  quantity?: number; // Añadimos quantity como opcional
 }
 
 interface CartContextType {
@@ -20,6 +21,7 @@ interface CartContextType {
   addToCart: (product: Product) => void; // Función para añadir al carrito
   removeFromCart: (id: number) => void; // Función para eliminar del carrito
   updateCartItem: (id: number, quantity: number) => void; // Función para actualizar cantidad
+  clearCart: () => void; // Función para limpiar el carrito
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -49,9 +51,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: "bottom-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 2000,
     timerProgressBar: true,
     didOpen: toast => {
       toast.onmouseenter = Swal.stopTimer;
@@ -101,6 +103,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]); // Limpiar el carrito
+    localStorage.removeItem("cartItems"); // Eliminar el carrito del localStorage
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -108,6 +115,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         addToCart,
         removeFromCart,
         updateCartItem,
+        clearCart, // Añadir clearCart al contexto
       }}>
       {children}
     </CartContext.Provider>

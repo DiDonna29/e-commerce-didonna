@@ -20,10 +20,10 @@ const Dashboard = () => {
               Perfil
             </a>
             <a
-              href="/favorite"
+              href="/dashboard/orders"
               className="flex items-center text-white hover:text-white py-4 transition-all duration-300">
               <FaClipboardUser className="m-4 h-8 w-8 hover:text-blue-600" />
-              Ordenes
+              Órdenes
             </a>
             <a
               href="/Product"

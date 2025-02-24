@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react"; // Asegúrate de importar React
+import React, { useEffect, useState } from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "@/utils/axiosConfig";
-import { useCart } from "@/app/context/CartContext"; // Importar el contexto del carrito
-import { useAuth } from "@/app/context/AuthContext"; // Importar el contexto de autenticación
+import { useCart } from "@/app/context/CartContext";
+import { useAuth } from "@/app/context/AuthContext";
 import Swal from "sweetalert2";
 
 const metadata: Metadata = {
@@ -15,23 +15,31 @@ const metadata: Metadata = {
 export default function Landing() {
   const [products, setProducts] = useState([]);
   const { addToCart } = useCart();
-  const { isAuthenticated } = useAuth(); // Obtener el estado de autenticación
+  const { isAuthenticated } = useAuth();
   const [activeSlide, setActiveSlide] = useState(1);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [isScrolling, setIsScrolling] = useState(false); // Estado para controlar la visibilidad de los botones
+  const [isScrolling, setIsScrolling] = useState(false);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get("/products");
-        setProducts(res.data);
-      } catch (error) {
-        console.error("Error al obtener los productos:", error);
-      }
-    };
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("/products");
+      const shuffledProducts = shuffleArray(res.data);
+      setProducts(shuffledProducts);
+    } catch (error) {
+      console.error("Error al obtener los productos:", error);
+    }
+  };
 
+  // Llama a la función solo en el cliente
+  if (typeof window !== "undefined") {
     fetchProducts();
-  }, []);
+  }
+}, []);
+
+  const shuffleArray = array => {
+    return array.sort(() => Math.random() - 0.5);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,26 +49,24 @@ export default function Landing() {
       const welcomeBottom = welcomeSection.getBoundingClientRect().bottom;
       const productsTop = productsSection.getBoundingClientRect().top;
 
-      // Verificar si estamos en la parte superior o inferior
       if (welcomeBottom <= 0) {
-        setIsAtTop(false); // Estamos en la sección de productos
+        setIsAtTop(false);
       } else if (productsTop >= window.innerHeight) {
-        setIsAtTop(true); // Estamos en la sección de bienvenida
+        setIsAtTop(true);
       }
 
-      // Detectar si el usuario está scrolleando
       setIsScrolling(true);
       clearTimeout(window.scrollTimeout);
       window.scrollTimeout = setTimeout(() => {
-        setIsScrolling(false); // Ocultar botones después de dejar de scrollear
-      }, 150); // Tiempo de espera para ocultar los botones
+        setIsScrolling(false);
+      }, 150);
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(window.scrollTimeout); // Limpiar el timeout al desmontar
+      clearTimeout(window.scrollTimeout);
     };
   }, []);
 
@@ -86,7 +92,7 @@ export default function Landing() {
             showConfirmButton: false,
             timer: 1000,
           });
-          window.location.href = "/SignIn"; // Redirigir a la página de inicio de sesión
+          window.location.href = "/SignIn";
         }
       });
     }
@@ -137,20 +143,20 @@ export default function Landing() {
         <h2 className="text-3xl font-bold text-white-900 mb-8">
           Productos Destacados
         </h2>
-        <div className="max-w-4xl mx-auto w-full h-[60vh] relative">
+        <div className="max-w-4xl mx-auto w-full h-[40vh] relative">
           {/* Slides */}
           {products.map((product, index) => (
             <div
               key={product.id}
-              className={`h-full w-full flex items-center bg-black text-white rounded-lg ${
+              className={`h-full w-full flex items-center bg-black via-black to-blue-950 text-white rounded-lg ${
                 activeSlide === index + 1 ? "block" : "hidden"
               }`}>
               <Image
                 src={product.image}
                 alt={product.name}
-                layout="fill" // Asegura que la imagen llene el contenedor
-                objectFit="contain" // Mantiene la proporción de la imagen
-                className="rounded-3xl"
+                fill
+                style={{ objectFit: "contain" }}
+                className="rounded-4xl"
               />
             </div>
           ))}
@@ -180,18 +186,6 @@ export default function Landing() {
               </button>
             </div>
           </div>
-
-          {/* Buttons */}
-          {/* <div className="absolute w-full flex items-center justify-center px-4">
-            {products.map((product, index) => (
-              <button
-                key={product.id}
-                className={`flex-1 w-4 h-2 mt-4 mx-2 mb-0 rounded-full overflow-hidden transition-colors duration-200 ease-out hover:bg-teal-600 hover:shadow-lg ${
-                  activeSlide === index + 1 ? "bg-indigo-600" : "bg-blue-300"
-                }`}
-                onClick={() => setActiveSlide(index + 1)}></button>
-            ))}
-          </div> */}
         </div>
       </div>
 

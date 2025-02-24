@@ -110,7 +110,7 @@ const ProductsPage: React.FC = () => {
     <div className="flex flex-col">
       <div className="flex-1 overflow-y-auto bg-black p-6">
         <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-2 bg-000 rounded-md shadow-md p-4">
+          <div className="col-span-2 bg-black rounded-md shadow-md p-4 h-[fit-content]">
             <h2 className="text-lg font-bold mb-4 text-white">Categorías</h2>
             <ul>
               {categoriesToPreLoad.map(category => (
@@ -200,7 +200,7 @@ const ProductsPage: React.FC = () => {
             <h3 className="text-xl font-semibold mb-3 mt-6 text-white">
               Productos
             </h3>
-            <div className="grid grid-cols-[repeat(3,1fr)] gap-y-[10px] gap-x-[10px]">
+            <div className="grid grid-cols-[repeat(3,1fr)] gap-y-[15px] gap-x-[15px]">
               {filteredProducts.map(product => (
                 <div
                   key={product.id}

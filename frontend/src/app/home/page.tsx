@@ -1,4 +1,5 @@
 "use client";
+
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +21,10 @@ export default function Home() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/products`
         );
-        setProducts(res.data);
+        // Obtener solo 3 productos aleatorios
+        const shuffledProducts = res.data.sort(() => 0.5 - Math.random());
+        const selectedProducts = shuffledProducts.slice(0, 3);
+        setProducts(selectedProducts);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
       }
@@ -31,15 +35,11 @@ export default function Home() {
 
   return (
     <div className="bg-black text-white overflow-hidden">
-      {" "}
-      {/* Eliminado h-screen aquí */}
       {/* Sección de productos */}
       {products.map((product, index) => (
         <section
           key={product.id}
           className="scroll-section relative h-screen flex flex-col md:flex-row snap-start ml-20 mr-20 rounded-md">
-          {" "}
-          {/* snap-start */}
           {/* Imagen del producto (alternando lados) */}
           <div
             className={`w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden group shine-effect rounded-2xl ${
@@ -50,7 +50,7 @@ export default function Home() {
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover transition-all duration-1000 group-hover:scale-110 group-hover:rotate-1"
+                className="object-contain transition-all duration-500 group-hover:scale-105 group-hover:rotate-1"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-black/20 transition-opacity duration-500 group-hover:opacity-0"></div>
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
                 Añadir al carrito
               </button>
               <Link href={`/Product/${product.id}`}>
-                <button className="ml-6 mt-4 px-6 bg-gradient-to-b from-blue-950 via-blue-900 to-blue-600  py-3 bg-white/0 hover:bg-blue-500/10 rounded-md text-sm font-medium transition-all duration-300 hover:tracking-wider">
+                <button className="ml-6 mt-4 px-6 bg-gradient-to-b from-blue-950 via-blue-900 to-blue-600 py-3 bg-white/0 hover:bg-blue-500/10 rounded-md text-sm font-medium transition-all duration-300 hover:tracking-wider">
                   Ver detalle de producto →
                 </button>
               </Link>

@@ -9,6 +9,8 @@ import {
 } from "./credential.service";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
+import { OrderRepository } from "../repositories/order.repository";
+import { Order } from "../entities/Order";
 
 export const checkUserExists = async (email: string): Promise<boolean> => {
   const user = await UserRepository.findOneBy({ email });
@@ -50,4 +52,31 @@ export const loginUserService = async (
   } else {
     throw new ClientError("Invalid password");
   }
+};
+
+export const getUserOrdersService = async (
+  userId: number
+): Promise<Order[]> => {
+  const orders = await OrderRepository.find({
+    relations: ["products"], // Incluir los productos relacionados
+    where: { user: { id: userId } }, // Filtrar por el ID del usuario
+  });
+
+  return orders;
+};
+
+export const getUserOrderByIdService = async (
+  userId: number,
+  orderId: number
+): Promise<Order> => {
+  const order = await OrderRepository.findOne({
+    relations: ["products"], // Incluir los productos relacionados
+    where: { id: orderId, user: { id: userId } }, // Filtrar por orderId y userId
+  });
+
+  if (!order) {
+    throw new ClientError("Order not found or does not belong to the user");
+  }
+
+  return order;
 };
